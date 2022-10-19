@@ -1,1 +1,376 @@
+################# WS ##################
+#### (SOAP)Prac 1:Create a TimeServer webservice in Java and Consume it in java and other technologies like php and .NET
+Project: Java - java web application
+Right click on the web application and create a new web service
+Give a name to package - Finish
+
+Go to design
+Remove the operation already there
+Then add new operation
+First operation name - GetTimeAsString (string)
+Second operation name - GetTimeasElapsed (long)
+
+Go to source code and replace 
+• return null with return new java.util.Date().to string();
+• return 0 with return new java.util.Date().getTime();
+
+Deploy it and then test the web service in web services folder
+Check the buttons if the value is there
+Copy the Wsdl file link 
+Now make a new web application and put the name as xyz_client
+Right click and make a web service client
+Wsdl url mai add the Wsdl link
+Delete the index.html and make it index.jsp
+Now drag and drop in the body tag from web service reference in there
+And then write "time elapsed" in the println function of println and same in time string .
+Run the index.jsp file
+Now open visual studio and now create a new project Console app(.net framework)
+Then soln explorer mai jaake add references and add service reference and add the Wsdl url in in address and go and ok.
+Then write in the code
+
+Servicereference1.Xyz_client client = new Servicereference1.Xyz_client();
+Console.WriteLine("Time as string:"+client.getTimeAsString());
+Console.WriteLine("Time as Elapsed:"+client.getTimeAsElapsed());
+Console.Read();
+
+Now open notepad for php and xampp
+go to xampp->php->php configuration settings file and search extension= and you'll get many values and change the first extension=php_soap.dll to soap.
+And also remove the ; from the front.
+Now write the code for php in notepad
+
+<?php>
+$client = new SoapClient("Wsdl url");
+$t1=$client ->GetTimeasElapsed ();
+echo "Elapsed time is", $t1 -> return;
+$t2=$client ->GetTimeAsString ();
+echo "<br>string time is", $t2 -> return;
+<?>
+
+Save in htdocs and run in localhost
+
+
+
+
+
+
+
+
+#### (SOAP)Prac 2:Java WS for performing basic calculations like addition, subtraction ,multiplication and Division and create a java client that consumes the same
+New project: java- java web application 
+Right click Add new webservice and add a package name
+Design and delete operation
+Add operations name add(double), sub(double), mul (double), div(double)
+with parameters a and b (both double)
+And in return 0.0 replace it with a+b,a-b.…..
+Deploy and test and get the Wsdl link 
+Now new web application for client and add webservices client and add the url for Wsdl
+Make a form with inputs in index.html :
+
+<form action= "operation.jsp">
+Enter first number <input type ....>
+ ye wala pura code from journal
+</Form>
+
+Now make a new jsp file usme hi as operation.jsp
+And drag and drop the web service references into the body tag
+Remove the <% wale in the middle 
+Remove the double a and b in the try blocks
+Now before the first try block
+add the code 
+
+double a =Double.parseInt(request.getParameter("first"));
+double b =Double.parseInt(request.getParameter("second"));
+String choice = request.getParameter("operations");
+if(choice.equals ("add")){ 
+Add the try block in this first wala
+}
+else if(choice.equals("sub")){
+Add the second try block
+}
+.
+.      So on for mul and div
+. 
+
+Save and run
+
+
+
+
+
+
+
+
+#### (SOAP)Prac 3:web service that gives NSE Index,BSE Index,Gold Rate
+new project- java - java web application
+go to services and click on Java db, and create a new database and then connect jdbc derby wala
+Now create a new table in it with columns NSE , BSE , GOLDRATE with int type
+View data in prac 3 table
+And insert data in the table
+Now add operations in design as
+GetNse, getBse, getGoldrate - all return type as int
+
+Now in getBSE(){
+int bse=0;
+try{
+Class.forname(" copy the driver class from jdbc derby ke properties");
+Connection con = DriverManager.getConnection("copy the jdbc derby properties and copy the database url", "username","password");
+Statement stmt = con.createStatement();
+ResultSet rs = stmt.executeQuery("select * from table name ");
+rs.next();                import the SQL wale statements   
+bse = rs.getIng("BSE");            
+
+} catch(Exception e) {
+
+}
+Return bse;
+}
+
+getNSE(){
+int nse=0;
+try{
+Class.forname(" copy the driver class from jdbc derby ke properties");
+Connection con = DriverManager.getConnection("copy the jdbc derby properties and copy the database url", "username","password");
+Statement stmt = con.createStatement();
+ResultSet rs = stmt.executeQuery("select * from table name ");
+rs.next();                import the SQL wale statements   
+bse = rs.getIng("NSE");            
+
+} catch(Exception e) {
+
+}
+Return nse;
+}
+
+.
+.
+.
+ Similar for gold
+
+Now deploy and test and get the Wsdl url
+Make a client for the same
+new project-> web application -> add webservices client and paste the Wsdl url
+Replace index.html with index.jsp
+Drag and drop web service references in body tag
+
+
+
+
+
+
+#### (SOAP)Prac 4:college name and rating
+new project- java - java web application
+Add new webservice with package 
+Now create a new table in the same db with columns clg , rating  with varchar type and give size.
+View data of this table and insert data
+Now design mai jaake
+Remove and add a new operation as 
+Get rating with return type as string
+Parameter as college_name
+
+getRating (){
+String rating="";
+try{
+Class.forname(" copy the driver class from jdbc derby ke properties");
+Connection con = DriverManager.getConnection("copy the jdbc derby properties and copy the database url", "username","password");
+PreparedStatement stmt = con.preparedstatement("select * from table name where college name=?");
+stmt.setString(1,college name);
+ResultSet rs = stmt.executeQuery();
+rs.next();                import the SQL wale statements   
+Rating = rs.getString("rating");            
+
+} catch(Exception e) {
+
+}
+Return rating;
+}
+
+Deploy and test and get the Wsdl url 
+
+Now client
+New web application and add web services client with the Wsdl url
+Now make a jsp file as rating.jsp
+Now in index.html make a form-
+
+<form action="clgs.jsp">
+  Enter College Name: <input type="text" name="CollegeName" value="" /><br>
+  <input type="submit" value="Submit" name="Submit" />
+</form>
+
+Now in jsp drag and drop in body from web references
+Now above try block
+
+String college_name= request.getParameter("name in index.html");
+
+Save and run
+
+
+
+
+
+
+#### (SOAP)Prac 5:news and prediction
+new project- java - java web application
+Add new webservice with package 
+Now create 2 new tables first is prac5 in the same db with columns date, news  with varchar type and give size.
+Second is prac5_pred with columns as sign and prediction with varchar type.
+View data and insert values
+Now design mai jaake
+Remove and add a new operation as 
+Getprediction(parameter sign)  and getBreakingNews( paramater date) both as string
+
+getBN(){
+String rating="";
+try{
+Class.forname(" copy the driver class from jdbc derby ke properties");
+Connection con = DriverManager.getConnection("copy the jdbc derby properties and copy the database url", "username","password");
+PreparedStatement stmt = con.preparedstatement("select * from table name(prac5) where date=?");
+stmt.setString(1,date);
+ResultSet rs = stmt.executeQuery();
+rs.next();                import the SQL wale statements   
+BreakingNews = rs.getString("news");            
+
+} catch(Exception e) {
+
+}
+Return BreakingNews;
+}
+
+getprediction (){
+String rating="";
+try{
+Class.forname(" copy the driver class from jdbc derby ke properties");
+Connection con = DriverManager.getConnection("copy the jdbc derby properties and copy the database url", "username","password");
+PreparedStatement stmt = con.preparedstatement("select * from table name(prac5_pred) where date=?");
+stmt.setString(1,sign);
+ResultSet rs = stmt.executeQuery();
+rs.next();                import the SQL wale statements   
+Prediction = rs.getString("pred");            
+
+} catch(Exception e) {
+
+}
+Return Prediction;
+}
+
+Deploy and test and get the Wsdl
+Now client
+New web application and add web services client with the Wsdl url
+Now make a jsp file as  index.jsp
+Now in index.html make a form-
+
+<form action="index.jsp">
+   Enter : <input type="text" name="data" value="" />
+   <br>
+   Select any one: <br>
+   news<input type="radio" name="operations" value="news" /><br
+   pred<input type="radio" name="operations" value="pred" /><br>
+   <input type="submit" value="Submit" name="Submit" />
+</form>
+
+Now in jsp drag and drop in body from web references and remove <%
+Above try catch block Write
+
+String t1=request.getParameter("news");
+String t2=request.getParameter("operations");
+If(choice.equals=("news")){
+Add the news wala try block
+}
+Else {
+second try block
+}      _Sidenote- in the try block change to java.lang.string result =port.getBN(a) matlab the radio button you click usme wo *a parameter jayega_*
+
+Save and run
+
+
+
+
+
+#### (REST)Prac 6:employee empid,empname and Designation
+New project- java- java web app
+Go to services and start the Java db and in the previously made database make a new table for prac 6
+The columns would have Id(int, primary key), name(varchar), designation (varchar).
+Now view data and insert the data.
+Now right-click on your web app and add new restful web services from db.
+Now give any name to data source and add the table for the prac. And give a package name and next.
+Now deploy the web application.
+And right click on the restful web services ka folder and test it. Click on the first option. 
+Make sure the browser is internet explorer near run.
+Go on your table on the left side when you test on your browser. Get application wala button ayega select and test it(all the post and gets) change and insert it .
+Insert the contents in post mai jaake with changing values
+
+
+
+
+
+#### (REST)Prac 7:student rollno, name and totalmarks
+New project- java- java web app
+Go to services and start the Java db and in the previously made database make a new table for prac 7
+Add columns as rollno(Int, primary key), name(varchar), totalmarks (int) - save ok
+view data and add data
+Now right-click on your web app and add new restful web services from db.
+Now give any name to data source and add the table for the prac. And give a package name and next.
+Now deploy and then test the restful web service folder.
+Now click on the left side table and test get and post the content in post.
+
+CLIENT SIDE-
+Now create a new web app for client side. And add the code in index.html
+Now add the <style> under head where you create a table [optional]
+
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style> 
+    table 
+    {
+    font-family: arial, sans-serif; 
+    border-collapse: collapse;
+    }
+
+    td, th 
+    {
+    border: 1px solid #000000; 
+    text-align: center; 
+    padding: 8px;
+    }
+ 
+</style>
+<script>
+    var request = new XMLHttpRequest();
+    request.open("GET","http://localhost:8080/PRAC7/webresources/stud.prac7",true);
+    request.onLoad = function() {
+        var data = JSON.parse(this.response);
+        console.log(data);
+        for (var i = 0; i < data.length; i++) 
+        {
+        var table = document.getElementById("myTable"); 
+        var row = table.insertRow();
+        var cell1 = row.insertCell(0); 
+        var cell2 = row.insertCell(1); 
+        var cell3 = row.insertCell(2);
+        cell1.innerHTML = data[i].rn;
+        cell2.innerHTML = data[i].name;
+        cell3.innerHTML = data[i].tot;
+        }
+    };
+    request.send();
+</script>
+    </head>
+    
+    <body>
+        <table id="myTable">
+        <tr>
+            <th>ROLL NO</th>
+            <th>NAME</th>
+            <th>TOTAL MARKS</th>
+        </tr>
+        </table>
+    
+    </body>
+</html>
+
+Save and run
+
+
 
