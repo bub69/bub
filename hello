@@ -1,1 +1,598 @@
+################ DirectX ##################
+Practical 1:Setup Directx 11, Window Framework And Initialize Direct3d Device
+Create Project > Windows Forms App (.NET Framework)
+.NET Framework 2.0
+Click on Project / Solution
 
+Add reference for microsoft.visualc.dll-
+Windows\Microsoft.NET\Framework\v2.0.50727
+
+For Microsoft.direct.directX , draw 3D- 
+Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0
+
+After writing the script
+BUild
+Configuration Manager
+Any CPU -> New
+x64 -> x86
+To fix the exception...
+Debug > Windows > Exception settings > Find LoaderLock
+Manage Debugging Assistants > Uncheck LoaderLock
+
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using Microsoft.DirectX.Direct3D;
+using Microsoft.DirectX;
+
+
+namespace Practical1
+{
+    public partial class Form1 : Form
+    {
+        Microsoft.DirectX.Direct3D.Device device;
+        public Form1()
+        {
+            InitializeComponent();
+            InitDevice();
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void InitDevice()
+        {
+            PresentParameters pp = new PresentParameters();
+            pp.Windowed = true;
+            pp.SwapEffect = SwapEffect.Discard;
+            device = new Device(0, DeviceType.Hardware, this, CreateFlags.HardwareVertexProcessing, pp);
+        }
+
+        public void Render()
+        {
+            device.Clear(ClearFlags.Target, Color.SaddleBrown, 0, 1);
+            device.Present();
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+
+            Render();
+
+        }
+    }
+}
+
+
+Practical2:Buffers, Shaders and HLSL (Draw a triangle using Direct3D 11)
+Prepare Documentation without appropriate description added.
+Create Project same as prac 1
+Add > References > Old references + MicrosoftVisualC.Dll
+To find MicrosoftVisualC.Dll -> Windows -> Microsoft.NET -> Framework -> v2 wala folder -> MicrosoftVIsualC.Dll
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using Microsoft.DirectX;
+using Microsoft.DirectX.Direct3D;
+
+namespace Practical2
+{
+    public partial class Form1 : Form
+    {
+        private Device device;
+        private CustomVertex.PositionColored[] vertex = new
+       CustomVertex.PositionColored[3];
+        public Form1()
+        {
+            InitializeComponent();
+
+        }
+
+
+        
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            PresentParameters pp = new PresentParameters();
+            pp.Windowed = true;
+            pp.SwapEffect = SwapEffect.Discard; device = new Device(0, DeviceType.Hardware, this, CreateFlags.HardwareVertexProcessing, pp);
+            device.Transform.Projection = Matrix.PerspectiveFovLH(3.14f / 4, device.Viewport.Width / device.Viewport.Height, 1f, 1000f);
+            device.Transform.View = Matrix.LookAtLH(new Vector3(0, 0, 20), new Vector3(), new Vector3(0, 1, 0));
+            device.RenderState.Lighting = false; vertex[0] = new CustomVertex.PositionColored(new Vector3(), Color.Black.ToArgb());
+            vertex[1] = new CustomVertex.PositionColored(new Vector3(3, 0, 0), Color.Black.ToArgb());
+            vertex[2] = new CustomVertex.PositionColored(new Vector3(0, 3, 0), Color.Black.ToArgb());
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            device.Clear(ClearFlags.Target, Color.Lavender, 1, 0);
+            device.BeginScene();
+            device.VertexFormat = CustomVertex.PositionColored.Format;
+            device.DrawUserPrimitives(PrimitiveType.TriangleList, vertex.Length / 3, vertex);
+            device.EndScene();
+            device.Present();
+        }
+    }
+}
+
+
+Practical3:Texturing (Texturing the triangle using direct 3D 11)
+Download a Textured Image from the Internet.
+Save it in your project directory
+Follow same procedures as prac 2
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using Microsoft.DirectX;
+using Microsoft.DirectX.Direct3D;
+
+namespace Practical3
+{
+    public partial class Form1 : Form
+    {
+        private Device device;
+        private CustomVertex.PositionTextured[] vertex = new CustomVertex.PositionTextured[3];
+        private Texture texture;
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            PresentParameters pp = new PresentParameters();
+            pp.Windowed = true;
+            pp.SwapEffect = SwapEffect.Discard;
+            device = new Device(0, DeviceType.Hardware, this, CreateFlags.HardwareVertexProcessing, pp);
+            device.Transform.Projection = Matrix.PerspectiveFovLH(3.14f / 4, device.Viewport.Width / device.Viewport.Height, 1f, 1000f);
+            device.Transform.View = Matrix.LookAtLH(new Vector3(0, 0, 20), new Vector3(), new Vector3(0, 1, 0));
+            device.RenderState.Lighting = false;
+            vertex[0] = new CustomVertex.PositionTextured(new Vector3(0, 1, 1), 0, 0);
+            vertex[1] = new CustomVertex.PositionTextured(new Vector3(-5, -5, 1), -1, 0);
+            vertex[2] = new CustomVertex.PositionTextured(new Vector3(5, -5, 1), 0, -1);
+            texture = new Texture(device, new Bitmap("C:\\Users\\vidit\\source\\repos\\Practical3\\Practical3\\Picture1.png"), 0, Pool.Managed);
+
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            device.Clear(ClearFlags.Target, Color.Black, 1, 0);
+            device.BeginScene();
+            device.SetTexture(0, texture);
+            device.VertexFormat = CustomVertex.PositionTextured.Format;
+            device.DrawUserPrimitives(PrimitiveType.TriangleList, vertex.Length / 3, vertex);
+            device.EndScene();
+            device.Present();
+
+        }
+    }
+}
+
+
+Practical4:Lightning (Programmable Diffuse Lightning using Direct 3D 11)
+Create a project same as the previous 3 pracs
+Configure the References
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using Microsoft.DirectX.Direct3D;
+using Microsoft.DirectX;
+
+namespace Practical4
+{
+    public partial class Form1 : Form
+
+    {
+        private Device device;
+        private CustomVertex.PositionNormalColored[] vertex = new CustomVertex.PositionNormalColored[3];
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            PresentParameters pp = new PresentParameters();
+            pp.Windowed = true;
+            pp.SwapEffect = SwapEffect.Discard;
+            device = new Device(0, DeviceType.Hardware, this, CreateFlags.HardwareVertexProcessing, pp);
+            device.Transform.Projection = Matrix.PerspectiveFovLH(3.14f / 4, device.Viewport.Width / device.Viewport.Height, 1f, 1000f);
+            device.Transform.View = Matrix.LookAtLH(new Vector3(0, 0, 20), new Vector3(), new Vector3(0, 1, 0));
+            device.RenderState.Lighting = false;
+            vertex[0] = new CustomVertex.PositionNormalColored(new Vector3(0, 1, 1), new Vector3(1, 0, 1), Color.Green.ToArgb());
+            vertex[1] = new CustomVertex.PositionNormalColored(new Vector3(-1, -1, 0), new Vector3(1, 0, 1), Color.Green.ToArgb());
+            vertex[2] = new CustomVertex.PositionNormalColored(new Vector3(1, -1, 1), new Vector3(-1, 0, 1), Color.Green.ToArgb());
+            device.RenderState.Lighting = true;
+            device.Lights[0].Type = LightType.Directional;
+            device.Lights[0].Diffuse = Color.White;
+            device.Lights[0].Direction = new Vector3(0.8f, 0, -1);
+            device.Lights[0].Enabled = true;
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            device.Clear(ClearFlags.Target, Color.FloralWhite, 1, 0);
+            device.BeginScene();
+            device.VertexFormat = CustomVertex.PositionNormalColored.Format;
+            device.DrawUserPrimitives(PrimitiveType.TriangleList, vertex.Length / 3, vertex);
+            device.EndScene();
+            device.Present();
+        }
+    }
+}
+
+
+Practical5:Loading models (image or File) using DirectX and rendering
+Repeat the same steps as previous pracs
+Just modify the code
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using Microsoft.DirectX;
+using Microsoft.DirectX.Direct3D;
+
+
+namespace Practical5
+{
+    public partial class Form1 : Form
+    {
+        Microsoft.DirectX.Direct3D.Device device;
+        Microsoft.DirectX.Direct3D.Font font;
+        Texture texture;
+        public Form1()
+        {
+            InitializeComponent();
+            InitializeDevice();
+            InitFont();
+            LoadTexture();
+        }
+        private void InitializeDevice()
+        {
+            PresentParameters pp = new PresentParameters();
+            pp.Windowed = true;
+            pp.SwapEffect = SwapEffect.Discard;
+            device = new Device(0, DeviceType.Hardware, this, CreateFlags.HardwareVertexProcessing, pp);
+
+        }
+        private void LoadTexture()
+        {
+            texture = TextureLoader.FromFile(device, "C:\\practicals\\STQA\\side files (output)\\text.img.jpg", 400, 400, 1, 0, Format.A8R8G8B8, Pool.Managed, Filter.Point, Filter.Point, Color.Transparent.ToArgb());
+        }
+        private void InitFont()
+        {
+            System.Drawing.Font f = new System.Drawing.Font("COMIC", 26f, FontStyle.Bold);
+            font = new Microsoft.DirectX.Direct3D.Font(device, f);
+        }
+        private void Render()
+        {
+            device.Clear(ClearFlags.Target, Color.Orange, 0, 1);
+            device.BeginScene();
+            using (Sprite s = new Sprite(device))
+            {
+                s.Begin(SpriteFlags.AlphaBlend);
+                s.Draw2D(texture, new Rectangle(0, 0, 0, 0), new Rectangle(0, 0, device.Viewport.Width, device.Viewport.Height), new Point(0, 0), 0f, new Point(0, 0), Color.LightCyan);
+                font.DrawText(s, "Vidit Kaloya", new Point(0, 0), Color.Black);
+                s.End();
+            }
+            device.EndScene();
+            device.Present();
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            Render();
+        }
+    }
+}
+
+
+Practical6:2D ufo
+Make a new folder sprites -
+Drag drop the images
+
+Main camera mai jaake do the size 16.5 
+projection orthographic 
+---------------
+Drag and drop background
+BACKGROUND -
+
+Background ke inspector mai jaake sorting layer mai add 3 layers background, pickup, player and 
+Add tag pickup all together to minimize time.
+Background ke inspector mai set sorting layer as background.
+Now drag and drop ufo image in sample scene. And add the sorting layer as player.
+
+1)Add component box collider -
+size: x-31.79 y-4
+Offset: x-0 y-14
+
+
+2)Add component box collider -
+size: x-31.79 y-4
+Offset: x-0 y- -14
+
+
+3)Add component box collider -
+size: x-31.79 y-4
+Offset: x-14 y-0
+
+
+4)Add component box collider -
+size: x-31.79 y-4
+Offset: x- -14 y-0
+
+
+------------
+PLAYER INSPECTOR-
+
+Scale: X-0.75, Y-0.75 , Z-1
+
+Add component rigidbody2d
+Gravity-0
+
+Add component circle collider2D
+Radius - 2.15
+
+Add component script -
+playercontroller 
+Speed - 10
+Add the code for the same 
+---------
+Now drag and drop pickup in sample scene
+-----------
+PICKUP INSPECTOR -
+
+Tag: Pickup
+
+Give position as 5(anything until it's visible)
+
+Add component circle collider2D- 
+IsTrigger: on
+Radius: 0.94
+
+Add component script rotator-
+Add the code
+
+Now copy pickup multiple times in sample space( Ctrl+D) and change the positions (or drag them by middle mouse button.)
+
+---------
+
+Now right click on sample scene blank space and add  ui-text
+Double click on text and then drag and drop waghera karlo text ko
+Anchor ke upar hi target jesa box h usme jaake ek bottom-left wala alt dabake click Karo .
+Change the name as count and text as Count too. Increase the font size waghera accordingly.
+Now make another ui-text same way and give the name as WIN TEXT.
+Same way target mai jaake put win in the center
+And for now uncheck the text in win.
+Now in player inspector put the win text and count text in player controller from drag and drop from the canvas we made now.
+Also agar wintext ka nahi aaya toh go in the playercontroller ka code and change the count according to your pickups added.
+Main camera ke inspector mai jaake add component new script and usme add cameracontroller aur fir uska code
+Drag and drop player in camera controller ke inspector game object
+
+-----------------------------------------------------------------------------------------------------
+CODE-
+PlayerController-
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PlayerController : MonoBehaviour
+{
+    public float speed;
+    private Rigidbody2D rbd;
+    public Text winText;
+    public Text countText;
+    public int count = 0;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        rbd = GetComponent<Rigidbody2D>();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag=="pickup")
+        {
+            other.gameObject.SetActive(false);
+            count++;
+            setCountText();
+        }
+    }
+
+    void setCountText()
+    {
+        countText.text = "Count " + count.ToString();
+        if(count==10)
+        {
+            winText.text = "You Won!";
+        }
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
+        Vector2 movement = new Vector2(moveHorizontal,moveVertical);
+        rbd.AddForce(movement*speed);
+    }
+}
+
+CameraController-
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CameraController : MonoBehaviour
+{
+    public GameObject player;
+    private Vector3 offset;
+    // Start is called before the first frame update
+    void Start()
+    {
+        offset = transform.position - player.transform.position;
+    }
+
+    // Update is called once per frame
+    void LateUpdate()
+    {
+        transform.position = player.transform.position + offset;
+    }
+}
+
+rotator-
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class rotator : MonoBehaviour
+{
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        transform.Rotate(new Vector3(0, 0, 45) * Time.deltaTime);
+    }
+}
+
+
+
+Practical7:3D rollball
+CODE-
+
+
+PlayerController-
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PlayerController : MonoBehaviour
+{
+    public Text winText;
+    public Text countText;
+    public int count;
+    private Rigidbody rb;
+    public float speed;
+    // Start is called before the first frame update
+    void Start()
+    {
+        count = 0;
+        winText.text = "";
+        rb = GetComponent<Rigidbody>();
+        SetCountText();
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
+        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        rb.AddForce(movement * speed);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("PickUp"))
+        {
+            other.gameObject.SetActive(false);
+            count = count + 1;
+            SetCountText();
+        }
+    }
+    void SetCountText()
+    {
+        countText.text = "Count : " + count.ToString();
+        if (count >= 8)
+        {
+            winText.text = "You win!";
+        }
+
+    }
+}
+
+
+
+CameraController-
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CameraController : MonoBehaviour
+{
+    private Vector3 offset;
+    public GameObject player;
+    // Start is called before the first frame update
+    void Start()
+    {
+        offset = transform.position - player.transform.position;
+    }
+
+    // Update is called once per frame
+    void LateUpdate()
+    {
+        transform.position = player.transform.position + offset;
+    }
+}
+
+
+
+Rotator-
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Rotator : MonoBehaviour
+{
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        transform.Rotate(new Vector3(15, 30, 45) * Time.deltaTime);
+    }
+}
