@@ -109,6 +109,13 @@ And insert data in the table
 Now add operations in design as
 GetNse, getBse, getGoldrate - all return type as int
 
+
+Import Files
+import javax.jws.WebService;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import java.sql.*;
+
 Now in getBSE(){
 int bse=0;
 try{
@@ -117,7 +124,7 @@ Connection con = DriverManager.getConnection("copy the jdbc derby properties and
 Statement stmt = con.createStatement();
 ResultSet rs = stmt.executeQuery("select * from table name ");
 rs.next();                import the SQL wale statements   
-bse = rs.getIng("BSE");            
+bse = rs.getInt("BSE");            
 
 } catch(Exception e) {
 
@@ -133,7 +140,7 @@ Connection con = DriverManager.getConnection("copy the jdbc derby properties and
 Statement stmt = con.createStatement();
 ResultSet rs = stmt.executeQuery("select * from table name ");
 rs.next();                import the SQL wale statements   
-bse = rs.getIng("NSE");            
+bse = rs.getInt("NSE");            
 
 } catch(Exception e) {
 
