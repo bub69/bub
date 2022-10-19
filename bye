@@ -116,48 +116,47 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import java.sql.*;
 
-Now in getBSE(){
-int bse=0;
-try{
-Class.forname(" copy the driver class from jdbc derby ke properties");
-Connection con = DriverManager.getConnection("copy the jdbc derby properties and copy the database url", "username","password");
-Statement stmt = con.createStatement();
-ResultSet rs = stmt.executeQuery("select * from table name ");
-rs.next();                import the SQL wale statements   
-bse = rs.getInt("BSE");            
 
-} catch(Exception e) {
+###NOW IN GET NSE####
 
-}
-Return bse;
-}
+public int NSE() {
+        int nse=0;
+        try{
+         //load driver
+         Class.forName("org.apache.derby.jdbc.ClientDriver"); ####(" copy the driver class from jdbc derby ke properties");
+         //Connection creation
+         Connection con=DriverManager.getConnection("jdbc:derby://localhost:1527/Vidit","vidit","123");  ###("URL,user,password")   (URL from properties)
+         Statement stmt = con.createStatement();
+         ResultSet rs=stmt.executeQuery("select * from VIDIT");
+         rs.next();
+         nse=rs.getInt("NSE");
 
-getNSE(){
-int nse=0;
-try{
-Class.forname(" copy the driver class from jdbc derby ke properties");
-Connection con = DriverManager.getConnection("copy the jdbc derby properties and copy the database url", "username","password");
-Statement stmt = con.createStatement();
-ResultSet rs = stmt.executeQuery("select * from table name ");
-rs.next();                import the SQL wale statements   
-bse = rs.getInt("NSE");            
+        }
+        catch(Exception e){
+            e.printStackTrace();
 
-} catch(Exception e) {
-
-}
-Return nse;
-}
+        }
+        return  nse;
+    }
+    .
+    .
+    .
+    .
+    .
+    Similar for BSE
 
 .
 .
 .
- Similar for gold
+ Similar for gold RATE
 
 Now deploy and test and get the Wsdl url
 Make a client for the same
 new project-> web application -> add webservices client and paste the Wsdl url
 Replace index.html with index.jsp
 Drag and drop web service references in body tag
+
+and instead "result ="  write NSE = , BSE = , Gold RAte =, REspectively
 
 
 
@@ -178,7 +177,7 @@ getRating (){
 String rating="";
 try{
 Class.forname(" copy the driver class from jdbc derby ke properties");
-Connection con = DriverManager.getConnection("copy the jdbc derby properties and copy the database url", "username","password");
+Connection con = DriverManager.getConnection("copy from jdbc derby properties and copy the database url", "username","password");
 PreparedStatement stmt = con.preparedstatement("select * from table name where college name=?");
 stmt.setString(1,college name);
 ResultSet rs = stmt.executeQuery();
@@ -390,4 +389,65 @@ Now add the <style> under head where you create a table [optional]
 </html>
 
 Save and run
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public int NSE() {
+        int nse=0;
+        try{
+         //load driver
+         Class.forName("org.apache.derby.jdbc.ClientDriver");
+         //Connection creation
+         Connection con=DriverManager.getConnection("jdbc:derby://localhost:1527/Vidit","vidit","123");//URL,user,password(URL from properties)
+         Statement stmt = con.createStatement();
+         ResultSet rs=stmt.executeQuery("select * from VIDIT");
+         rs.next();
+         nse=rs.getInt("NSE");
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+
+        }
+        return  nse;
+    }
+
 
