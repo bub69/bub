@@ -313,6 +313,17 @@ Now deploy and then test the restful web service folder.
 Now click on the left side table and test get and post the content in post.
 
 CLIENT SIDE-
+
+create a web application 
+right click on the project made(client)
+new option
+select restfuljava Client (if not select from others -> webservices)
+give class name and package name of your own 
+down theere 
+select from project and browse your server side of the project which is already made and is faked 
+in pages open html file
+
+
 Now create a new web app for client side. And add the code in index.html
 Now add the <style> under head where you create a table [optional]
 
@@ -338,7 +349,7 @@ Now add the <style> under head where you create a table [optional]
 </style>
 <script>
     var request = new XMLHttpRequest();
-    request.open("GET","http://localhost:8080/PRAC7/webresources/stud.prac7",true);
+    request.open("GET","http://localhost:8080/PRAC7/webresources/stud.prac7",true);   ###NOTE the link is available in the server side on the top when we test the sever side of the webservice
     request.onLoad = function() {
         var data = JSON.parse(this.response);
         console.log(data);
@@ -371,6 +382,4 @@ Now add the <style> under head where you create a table [optional]
 </html>
 
 Save and run
-
-
 
