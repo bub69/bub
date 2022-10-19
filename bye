@@ -323,7 +323,8 @@ down theere
 select from project and browse your server side of the project which is already made and is faked 
 in pages open html file
 
-
+###NOTE - after creating server side IN FACADE REST>java which is in serverside-> 
+and in .service file ->open ->remove aaplication/xml, from @Produces({"application/xml", "application/json"}) from all statements wherever it ism present
 Now create a new web app for client side. And add the code in index.html
 Now add the <style> under head where you create a table [optional]
 
