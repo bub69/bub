@@ -451,3 +451,20 @@ public int NSE() {
     }
 
 
+
+
+
+
+
+###WCF####
+
+
+Create Project >WCF Application> delete .cs and  . svc.cs file > add > service reference> search "WCF" Click first option> click ok > copy paste codes of both file> build run
+
+WCF server:
+Create Project >WCF Application> delete .cs and  . svc.cs file > add > service reference> search "WCF" Click first option> click ok > copy paste codes of both file> build run
+
+
+WCF Client:
+Create new Project> Asp(.NET Framework) > add> Webform > copy paste code of both files > run
+
