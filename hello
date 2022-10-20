@@ -596,3 +596,341 @@ public class Rotator : MonoBehaviour
         transform.Rotate(new Vector3(15, 30, 45) * Time.deltaTime);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+prac6:
+AIM:To create a 2D UFO game.
+STEPS:
+Ufo game
+2018.4.36fi version select
+Student or personal purpose
+New project - 2D game - Project Name- Create project
+
+In Assets folder - Create folder - Sprite (name of folder) -add images In sprites folder from download- total 3 images (background,pickup,UFO)
+
+Click on Assets then Open Scenes click on SampleScene and rename it as "ufo"
+Then save it
+In Sprite folder, select Background and drag and drop it to left side "Hierarchy" then select Scene mode.
+Press 'F'
+Gizmoz- 2nd option- uncheck show grid - then add ufo to hierarchy- rename ufo to Player in Inspector section
+-In hierarchy-click on background- Inspector - Sorting Layer-Add sorting layer- +(plus) - name it as background- click on Background (in hierarchy) 
+now select background as your sorting layer
+-Same for player - make new sorting layer (named player) and select it
+Select player in hierachy- inpsection- transform- Scale X(0.75) Y(0.75) Z(1)
+In main camera from hierachy, set projection as orthographicSelect main camera from hierachy and then go to game mode - inspector- size- 16.5
+Change background colour
+Select player from hierachy- Add component -Physics 2D- Rigidbody 2d- then add script in player - "PlayerController" create and add
+-In Assets double click on created script in visual studio
+- Select player in hierachy - rigidbody- gravity scale -0
+- Then set speed as 10 in script
+- In player from hierachy-add component- circle collider 2d- set radius 2.15
+-In background from hierachy- add box collider 2d-
+set size X(31.79)Y(4)
+Offset X(0) Y(14)
+
+In box collider 2d, click on settings icon on right top-copy component - paste component as new  three times 
+
+2nd box collider
+set size X(31.79)Y(4)
+Offset X(0) Y(-14)
+
+3rd box collider
+set size X(4)Y(31.79)
+Offset X(14) Y(0)
+
+4th box collider
+set size X(4)Y(31.79)
+Offset X(-14) Y(0)
+-In maincamera from hierachy-add component-add script- named as ' CameraController'
+-Select maincamera from hierachy-inspection- camera controller- Player-(drag and drop the player from hierachy)
+- From sprite folder, drag Pickup into hierachy
+- Select pickup from hierachy-add component-circle collider 2d
+Pickup-inspection-add sorting layer-new-create pickup-select as sorting layer
+- Circle collider-set radius as 0.94- for pickup from hierachy-add new script-name - 'rotator'
+- Select pickup from hierachy-ctrl+d-set pickups in scene mode to different positions
+- Select pickup from hierachy-inspection-tag option -add tag-+- name it as 'pickup'(remember) then select it for all the pickups
+- Select istrigger in circle collider 2d of pickup
+- Check istrigger for all the pickups
+-In hierachy-select and right click ufo-gameobject-UI-Text
+-Two texts named 'countText' and 'winText'
+- Select player from hierachy -in script -drag and drop wintext and counttext from hierachy
+
+CODES:
+
+CameraController.cs:
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CameraController : MonoBehaviour
+{
+    public GameObject player;
+    private Vector3 offset;
+    // Start is called before the first frame update
+    void Start()
+    {
+        offset = transform.position - player.transform.position;
+
+    }
+
+    // Update is called once per frame
+    void LateUpdate()
+    {
+        transform.position = player.transform.position + offset;
+
+    }
+}
+
+
+PlayerController.cs:
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PlayerController : MonoBehaviour
+{
+    public float speed;
+    private Rigidbody2D rbd;
+    public Text winText;
+    public Text countText;
+    public int count = 0;
+
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        rbd = GetComponent<Rigidbody2D>();
+
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "pickup")
+        {
+            other.gameObject.SetActive(false);
+            count++;
+            setCountText();
+
+        }
+    }
+
+    void setCountText()
+    {
+        countText.text = "Count" + count.ToString();
+        if (count == 10)
+        {
+            winText.text = "You Win";
+        }
+    }
+
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
+        Vector2 movement = new Vector2(moveHorizontal, moveVertical);
+        rbd.AddForce(movement * speed);
+
+    }
+}
+
+rotator.cs:
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Rotator : MonoBehaviour
+{
+    // Start is called before the first frame update
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        transform.Rotate(new Vector3(0, 0, 45) * Time.deltaTime);
+
+    }
+}
+*********************************
+prac7 
+aim*******
+To create a 3D roll-ball game.
+
+create 3d project - in hierarchy create new plane rename as ground-create new sphere rename as player
+change position of player to 0.5
+reset transform panel-
+in bottom-project-create -folder-(Material)
+Project Window ->select Folder -> give name: materials
+-Keep the materials folder selected -> again click on plus sign below the Project Window -> select Material -> give name: background
+-drag the background to the hierarchy to ground 
+-Select Player -> Add component -> Physics ->Rigidbody
+•Select Player -> Add component ->New Script -> give name: PlayerController 
+•Inspector window of Player -> go to the end -> change speed to 10
+•Select Main Camera -> Inspector window -> and change values 
+positin Y(10) Rotation X(45)
+•Select Main Camera -> Inspector window -> New Script -> give name: CameraController 
+•Select CameraController ->in Inspector window -> drag the Player from hierarchy inside the Camera Controller Script 
+file-save as -scene-name as RollBall
+•Click on plus sign below the Hierarchy -> Create Empty -> rename: Walls
+•Click on plus sign below the Hierarchy ->3D Object ->Cube -> rename: westwall
+•Drag westwall inside Walls and change values for westwall
+westwall:Position X(-5) Scale(0.5,2,10.5)
+•Similarly create for other three walls
+Eastwall:Position X(5) Scale(0.5,2,10.5)
+northwall:Position Z(5) Scale(10.5,2,0.5)
+southwall:Position Z(-5) Scale(10.5,2,0.5)
+•Click on plus sign below the Project Window -> select Folder -> give name: prefabs
+•Plus Symbol below Hierarchy ->Select 3D Object ->Select Cube -> inside inspector window -> give name: Pickup
+•GameObject Tab -> rename: Pickups
+•Drag pickup inside pickups
+•Now drag pickup to prefabs folder
+(uncheck Player) Go to Inspector window of Pickup -> change values
+Rotation(45,45,45) Scale(0.5,0.5,0.5)
+•	Save and Test
+•	Scene Mode ->Change the direction to top view ->Drag and Drop all the Pickups from hieracrchy
+
+•	Update PlayerControllerScript
+•	Prefabs folder -> Select Pickup (so it will be updated for all pickups) -> Add component -> Physics ->Rigidbody (check ‘Is Trigger’ &‘Is Kinematic’)
+•	Scroll Up -> Click on Tag -> Add Tag ->click on pluss sign -> Name: “PickUp” (this name should be same as the name inside the code of PlayerController Script -> inside OnTriggerEnter) -> Save
+•	Now again Click on Tag -> you can see PickUp option -> Select PickUp
+•	Click on plus sign below Hierarchy -> UI ->text
+
+•	Canvas is created -> inside it there is Text -> Rename the text to countText
+
+•	Inside inspector window change ‘New Text’ to ‘countText’
+
+•	Change color to yellow
+
+•	Select Player ->Then drag the counTextfrom hierarchy to inspector of Player ->PlayerController Script -> inside CountText
+
+•	Similarly take one more UI -> name: winText (follow the same steps as for countText)
+
+
+•	Go to Scene -> change from Local to Global
+•	Make duplicates of Pickup ( Control + D )
+
+PlayerController.cs:
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PlayerController : MonoBehaviour
+{
+    public Text winText;
+    public Text countText;
+    public int count;
+    private Rigidbody rb;
+    public float speed;
+    // Start is called before the first frame update
+    void Start()
+    {
+        count = 0;
+        winText.text = "";
+        rb = GetComponent<Rigidbody>();
+        SetCountText();
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
+        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        rb.AddForce(movement * speed);
+
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("PickUp"))
+        {
+            other.gameObject.SetActive(false);
+            count = count + 1;
+            SetCountText();
+        }
+    }
+    void SetCountText()
+    {
+        countText.text = "Count : " + count.ToString();
+        if (count >= 9)
+        {
+            winText.text = "You win!";
+        }
+
+    }
+}
+
+CameraController.cs:
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CameraController : MonoBehaviour
+{
+    private Vector3 offset;
+    public GameObject player;
+    // Start is called before the first frame update
+    void Start()
+    {
+        offset = transform.position - player.transform.position;
+    }
+
+    // Update is called once per frame
+    void LateUpdate()
+    {
+        transform.position = player.transform.position + offset;
+    }
+}
+
+Rotator:
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Rotator : MonoBehaviour
+{
+    // Start is called before the first frame update
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        transform.Rotate(new Vector3(15, 30, 45) * Time.deltaTime);
+    }
+}
+
+
+
