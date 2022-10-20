@@ -468,3 +468,10 @@ Create Project >WCF Application> delete .cs and  . svc.cs file > add > service r
 WCF Client:
 Create new Project> Asp(.NET Framework) > add> Webform > copy paste code of both files > run
 
+
+
+
+
+WCF server:
+Create Project >WCF Application> delete .cs and  . svc.cs file > add > service reference> search "WCF" Click first option> click ok > copy paste codes of both file>build run >add > Asp(.NET Framework) > add> Webform > copy paste code of both files > right click on project >properties> select radio button of startup both file>run .cs file
+
