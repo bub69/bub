@@ -394,6 +394,16 @@ Save and run
 
 
 ####FLIGHT PORTAL####
+#portal - flight
+database (flightid,flightname,place of departure,date of departure,place of destination,capacity)
+function
+inputs(pod,dod,podes,no. of seats)
+if pod,podes,dod not in database
+return no flights
+if capacity> return no seats available
+all inputs and seats return ticket booked and update database
+create client jsp#
+
 ###SERVERSIDE
 
 /*
