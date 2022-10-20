@@ -526,7 +526,7 @@ print("Decrypted Text: ", decrypted_text)
 
 -------------------------------------------------------------------------------------------------------------
 
-#Deffi Hellman
+#Deffi Hellman #12,14,7,11
 import math
 
 def hellman(Xa, Xb, p, a):
