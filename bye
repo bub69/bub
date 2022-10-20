@@ -393,6 +393,133 @@ Save and run
 
 
 
+####FLIGHT PORTAL####
+###SERVERSIDE
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package fp;
+
+import javax.jws.WebService;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import java.sql.*;
+
+/**
+ *
+ * @author Jyothi
+ */
+@WebService(serviceName = "flightportal")
+public class flightportal {
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "booktickets")
+    public String booktickets(@WebParam(name = "pod") String pod, @WebParam(name = "dod") String dod, @WebParam(name = "podes") String podes, @WebParam(name = "seats") int seats) {
+        //TODO write your implementation code here:
+        String output="";
+        try{
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Connection con=DriverManager.getConnection("jdbc:derby://localhost:1527/flights","jyothi","123");
+            PreparedStatement pstmt = con.prepareStatement("Select * from PORTAL where placeofdeparture=? and dateofdeparture=? and placeofdestination=?");
+            pstmt.setString(1,pod);
+            pstmt.setString(2,dod);
+            pstmt.setString(3,podes);
+            ResultSet rs=pstmt.executeQuery();
+            if (rs.next()){
+                int nseats=rs.getInt("capacity");
+                int flightid=rs.getInt("flightid");
+                if(seats<=nseats){
+                    
+                    output="ticket booked";
+                    PreparedStatement pstmt1 = con.prepareStatement("Update portal set capacity=? where flightid=?");
+                    pstmt1.setInt(1,nseats-seats);
+                    pstmt1.setInt(2,flightid);
+                    pstmt1.execute();
+                }
+                else
+                {
+                 output="seats not available";
+            
+                }
+            }
+            else{
+               output="No flights"; 
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return output;
+    }
+}
+
+
+#####CLIENTSIDE
+
+####index.html
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <form action="Client.jsp">
+            Enter place of departure- <input type="text" name="pod" /><br>
+            Enter date of departure- <input type="text" name="dod" /><br>
+            Enter place of destination- <input type="text" name="podes" /><br>
+            Enter number of seats- <input type="number" name="capacity" /><br>
+            <input type="submit" value="submit"/>
+        </form>
+    </body>
+</html>
+
+
+##Client.jsp
+
+<%-- 
+    Document   : Client
+    Created on : 21 Oct, 2022, 1:47:24 AM
+    Author     : Jyothi
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+           <%-- start web service invocation --%><hr/>
+    <%
+    try {
+	fp.Flightportal_Service service = new fp.Flightportal_Service();
+	fp.Flightportal port = service.getFlightportalPort();
+	 // TODO initialize WS operation arguments here
+	java.lang.String pod = request.getParameter("pod");
+	java.lang.String dod = request.getParameter("dod");
+	java.lang.String podes = request.getParameter("podes");
+	int seats = Integer.parseInt(request.getParameter("capacity"));
+	// TODO process result here
+	java.lang.String result = port.booktickets(pod, dod, podes, seats);
+	out.println("Result = "+result);
+    } catch (Exception ex) {
+	// TODO handle custom exceptions here
+    }
+    %>
+    <%-- end web service invocation --%><hr/>
+ 
+    </body>
+</html>
+
+
 
 
 
