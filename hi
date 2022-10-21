@@ -404,7 +404,7 @@ print("Decrypted Text: ",decipher)
 
 ---------------------------------------------------------------------------------------------------------------
 
-#### AES ANantha###
+#### DES ANantha###
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
